@@ -1,12 +1,10 @@
 # **🚀 Deploying Large Language Models (LLMs) in AWS Lambda with Ollama**
 
-Deploy Cutting-Edge LLMs: DeepSeek R1, Falcon3, Mistral and LLaMA3.2... among others on AWS Lambda with Ollama
-
 ![alt text](./image.png)
 
-This project enables **serverless LLM inference** using **AWS Lambda** with **Ollama** as Infrastracture as Code (IaC). It is designed to work **within Lambda’s limits** (max **10GB ephemeral storage** and **10GB memory**).
+This project enables **serverless LLM inference** using **AWS Lambda** with **Ollama** as Infrastracture as Code (IaC). It is designed to work **within Lambda’s limits** (max **10GB ephemeral storage** and **10GB memory**). Deploy Cutting-Edge LLMs like DeepSeek R1, Falcon, Mistral and LLaMA models... among others at the lowest cost on AWS Lambda with Ollama.
 
-To deploy your function, simply run:
+**To deploy your function, simply run**:
 
 ```bash
 bash deploy.sh
