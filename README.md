@@ -1,8 +1,24 @@
-## **🚀 Deploying Large Language Models (LLMs) in AWS Lambda with Ollama**
+# **🚀 Deploying Large Language Models (LLMs) in AWS Lambda with Ollama**
 
 This project enables **serverless LLM inference** using **AWS Lambda** with **Ollama** as Infrastracture as Code (IaC). It is designed to work **within Lambda’s limits** (max **10GB ephemeral storage** and **10GB memory**).
 
+To deploy your function, simply run:
+
+```bash
+bash deploy.sh
+```
+
+This script automates the **entire setup**, including **image building, ECR upload, and Lambda deployment**.
+
 ---
+
+## How does it work? 
+
+**Distilled models** are smaller, optimized versions of LLMs that retain most capabilities while reducing computational overhead, making them ideal for serverless execution. **Ollama** enables efficient deployment of large language models (LLMs) locally. As a challenge, we are pushing the limits by deploying LLMs within AWS Lambda's 10GB ephemeral storage and memory constraints, optimizing for performance while maintaining flexibility.
+
+For **production-grade applications**, AWS provides alternatives such as:  
+- **DeepSeek-R1 and Llama distilled variants on Amazon SageMaker AI** for scalable inference.  
+- **Amazon Bedrock (via Custom Model Import)** for managed model hosting.
 
 ## **1️⃣ AWS Lambda Resource Limits**
 
@@ -10,7 +26,7 @@ AWS Lambda has strict resource constraints. This setup is optimized for:
 
 - **Memory**: **Up to 10GB** (`--memory-size 10240`).
 - **Ephemeral Storage**: **Up to 10GB** (`--ephemeral-storage '{"Size": 10240}'`).
-- **Timeout**: Default is **15 minutes (900s)**, but you may need to **increase it** when pulling larger models.
+- **Timeout**: Currently set to **5 minutes (300s)**
 
 These limits allow **running models within 10GB** (e.g., `deepseek-r1:8b`), but **larger models won’t fit** within this setup.
 
@@ -95,20 +111,11 @@ Infrastructure as Code (IaC) **automates AWS resource creation**, ensuring:
 5. **Pushes the image** to AWS ECR.
 6. **Deploys the Lambda function using AWS CloudFormation.**
 7. **Forces AWS Lambda to update the image** (to ensure new deployments take effect).
-
 ### **Running the Deployment**
-
-To deploy your function, simply run:
-
-```bash
-bash deploy.sh
-```
-
-This script automates the **entire setup**, including **image building, ECR upload, and Lambda deployment**.
 
 ---
 
-## **7️⃣ Next Steps**  
+## **6️⃣ Next Steps**  
 
 ### **1️⃣ Try Different LLM Models**  
 
