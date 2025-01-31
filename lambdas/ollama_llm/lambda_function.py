@@ -20,7 +20,7 @@ def lambda_handler(event, context):
     # 2. Construct the request for Ollama.
     url = "http://localhost:11434/api/chat"
     payload = {
-        "model": "llama3.2:1b",  
+        "model": "deepseek-r1:8b",  
         "messages": [
             {
                 "role": "user",

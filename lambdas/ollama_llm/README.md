@@ -33,7 +33,7 @@ Build the Docker image using the Dockerfile:
 
 ```bash
 # docker build -t ollama_llm:latest .
-docker build --platform linux/amd64 -t ollama_llm:latest .
+docker build --platform linux/amd64  --progress=plain -t ollama_llm:latest .
 ```
 
 ### 4. Tag the Docker Image
