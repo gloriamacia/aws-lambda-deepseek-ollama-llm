@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Variables
+AWS_REGION="us-east-1"  # Change to your AWS region
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+ECR_REPO_NAME="ollama-llm"
+IMAGE_TAG="latest"
+IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
+STACK_NAME="OllamaLambdaStack"
+
+# Step 1: Authenticate with AWS ECR
+echo "Logging in to Amazon ECR..."
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+# Step 2: Create ECR Repository (if it doesn’t exist)
+echo "Checking if ECR repository exists..."
+aws ecr describe-repositories --repository-names ${ECR_REPO_NAME} --region ${AWS_REGION} >/dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+    echo "ECR repository not found. Creating..."
+    aws ecr create-repository --repository-name ${ECR_REPO_NAME} --region ${AWS_REGION}
+else
+    echo "ECR repository already exists."
+fi
+
+# Step 3: Build and Tag Docker Image
+echo "Building Docker image..."
+docker build --platform linux/amd64  --progress=plain -t ${ECR_REPO_NAME} .
+
+echo "Tagging image..."
+docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} ${IMAGE_URI}
+
+# Step 4: Push Image to ECR
+echo "Pushing Docker image to ECR..."
+docker push ${IMAGE_URI}
+
+# Step 5: Deploy CloudFormation Stack
+echo "Deploying CloudFormation stack..."
+aws cloudformation deploy \
+  --template-file template.yaml \
+  --stack-name ${STACK_NAME} \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides ImageUri=${IMAGE_URI}
+
+echo "Deployment completed successfully!"
