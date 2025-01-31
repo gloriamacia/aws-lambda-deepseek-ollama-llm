@@ -119,16 +119,16 @@ Infrastructure as Code (IaC) **automates AWS resource creation**, ensuring:
 
 ## **6️⃣ Next Steps**  
 
-### **1️⃣ Try Different LLM Models**  
+### **1️. Try Different LLM Models**  
 
-### **2️⃣ Enable AWS Lambda Response Streaming**  
+### **2️. Enable AWS Lambda Response Streaming**  
 - **Stream responses** instead of waiting for full output ([AWS Streaming](https://aws.amazon.com/blogs/compute/introducing-aws-lambda-response-streaming/)).  
 
-### **3️⃣ Add Memory & Conversation History**  
+### **3️. Add Memory & Conversation History**  
 - **Use DynamoDB** to store chat history with a **Session ID**.  
 - Modify `lambda_function.py` to **retrieve & update** session context.  
 
-### **4️⃣ Contribute & Improve**  
+### **4️. Contribute & Improve**  
 1. **Fork the Repository** – Clone and start developing.  
 2. **Implement Features** – Streaming, session memory, efficiency optimizations.  
 3. **Submit a Pull Request** – Ensure code is **tested & documented**.  
