@@ -3,24 +3,33 @@ import requests
 
 def lambda_handler(event, context):
     """
-    AWS Lambda handler that takes a question from the 'event',
-    sends it to the Ollama API at localhost:11434/api/chat,
-    and returns the answer.
+    AWS Lambda handler that takes a user question and model name from the event,
+    sends it to the Ollama API at localhost:11434/api/chat, and returns the answer.
     """
-    # 1. Parse the incoming event for user input.
-    #    The structure depends on how you invoke Lambda (API Gateway, etc.).
-    #    For example, if it's a JSON payload with a "user_message" field:
+    # Default values
+    default_message = "What is the meaning of life?"
+    default_model = "deepseek-r1:8b"
+
+    # Parse the event body
     body = event.get("body")
     if body:
-        body_data = json.loads(body)
-        user_message = body_data.get("user_message", "Hello from Lambda!")
+        try:
+            body_data = json.loads(body)
+            user_message = body_data.get("user_message", default_message)
+            model_name = body_data.get("model_name", default_model)
+        except json.JSONDecodeError:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": "Invalid JSON format in request body."})
+            }
     else:
-        user_message = "Hello from Lambda!"
+        user_message = default_message
+        model_name = default_model
 
-    # 2. Construct the request for Ollama.
+    # Construct request for Ollama
     url = "http://localhost:11434/api/chat"
     payload = {
-        "model": "deepseek-r1:8b",  
+        "model": model_name,
         "messages": [
             {
                 "role": "user",
@@ -30,7 +39,7 @@ def lambda_handler(event, context):
         "stream": False
     }
 
-    # 3. Send request to Ollama container on localhost.
+    # Send request to Ollama container
     try:
         response = requests.post(url, json=payload)
         response.raise_for_status()
@@ -40,13 +49,13 @@ def lambda_handler(event, context):
             "body": json.dumps({"error": str(e)})
         }
 
-    # 4. Parse JSON response from Ollama
+    # Parse JSON response from Ollama
     try:
         data = response.json()
     except json.JSONDecodeError:
         data = {"response": response.text}
 
-    # 5. Return a structured response for your API Gateway or caller
+    # Return structured response
     return {
         "statusCode": 200,
         "body": json.dumps(data)
