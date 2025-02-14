@@ -17,7 +17,7 @@ done
 echo "Ollama server is ready."
 
 # Ensure the required model is pulled before use
-MODEL_NAME="deepseek-r1:8b"
+MODEL_NAME="MFDoom/deepseek-r1-tool-calling:1.5b"
 
 pull_model() {
     echo "Pulling model '$MODEL_NAME' again..."

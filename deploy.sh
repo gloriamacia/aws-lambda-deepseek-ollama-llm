@@ -35,17 +35,22 @@ echo "Pushing Docker image to ECR..."
 docker push ${IMAGE_URI}
 
 # Step 5: Deploy CloudFormation Stack
-echo "Deploying CloudFormation stack..."
-aws cloudformation deploy \
-  --template-file template.yaml \
-  --stack-name ${STACK_NAME} \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides ImageUri=${IMAGE_URI}
+# echo "Deploying CloudFormation stack..."
+# aws cloudformation deploy \
+#   --template-file template.yaml \
+#   --stack-name ${STACK_NAME} \
+#   --capabilities CAPABILITY_NAMED_IAM \
+#   --parameter-overrides ImageUri=${IMAGE_URI}
 
 # Step 6: Force AWS Lambda to Update the Image
-echo "Forcing Lambda to use the new image..."
-aws lambda update-function-code \
-  --function-name ${STACK_NAME} \
-  --image-uri ${IMAGE_URI}
+# echo "Checking if Lambda function exists..."
+# if aws lambda get-function --function-name ${STACK_NAME} >/dev/null 2>&1; then
+#     echo "Lambda function exists. Updating the image..."
+#     aws lambda update-function-code \
+#       --function-name ${STACK_NAME} \
+#       --image-uri ${IMAGE_URI}
+# else
+#     echo "Lambda function does not exist yet. Skipping update."
+# fi
 
 echo "Deployment completed successfully!"
